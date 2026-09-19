@@ -1,0 +1,13 @@
+{
+  "name": "creta-2026",
+  "version": "1.0.0",
+  "description": "Site de grup pentru excursia în Creta, 19-24 septembrie 2026.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "verifica": "for f in js/*.js js/lib/*.js js/date/*.js js/ecrane/*.js sw.js; do node --check \"$f\" || exit 1; done && echo sintaxa OK",
+    "cripteaza": "node tools/cripteaza.mjs",
+    "servi": "python3 -m http.server 8765"
+  }
+}

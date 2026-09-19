@@ -1,0 +1,13 @@
+# ⚠️ SURSA DATELOR SENSIBILE — NU AJUNGE NICIODATĂ ÎN GIT.
+# Conține PIN-urile cazărilor și codurile de rezervare în clar. Din el se
+# generează `js/date/secret.json`, criptat, care POATE fi public.
+secrete.local.json
+
+# Copiile descărcate din aplicație (⚙️ Setări → Descarcă tot): conțin
+# cheltuielile și amintirile grupului.
+creta-copie-*.json
+
+# Locale
+.DS_Store
+.claude/
+node_modules/

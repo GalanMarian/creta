@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Creta 2026 — șapte prieteni, șase zile</title>
+<meta name="description" content="Tot ce ne trebuie pentru Creta, 19–24 septembrie 2026: zboruri, cazări, mașină, itinerariu pe zile, voturi, cheltuieli și numere de urgență.">
+<meta name="theme-color" content="#0d6e8f" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1519" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Creta">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇬🇷</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Prima deschidere: cine ești. Fără parolă, fără cont. -->
+<div id="poarta" class="poarta" hidden>
+  <div class="poarta-carte">
+    <p class="poarta-supra">Creta · 19–24 septembrie 2026</p>
+    <h1 class="poarta-titlu">Cine ești?</h1>
+    <p class="poarta-sub">Alege-ți numele. Rămâne ținut minte pe telefonul ăsta și se folosește la voturi, la pachet și la cheltuieli.</p>
+    <div id="poarta-lista" class="poarta-lista"></div>
+  </div>
+</div>
+
+<header class="cap">
+  <div class="cap-rand">
+    <button id="buton-meniu" class="cap-buton" type="button" aria-label="Meniu" aria-expanded="false">
+      <span class="ico-linii" aria-hidden="true"></span>
+    </button>
+    <div class="cap-mijloc">
+      <h1 id="cap-titlu" class="cap-titlu">Creta</h1>
+      <p id="cap-sub" class="cap-sub"></p>
+    </div>
+    <button id="buton-sos" class="cap-sos" type="button" aria-label="Numere de urgență">SOS</button>
+  </div>
+  <div id="bara-sincronizare" class="bara-sincronizare" hidden></div>
+</header>
+
+<main id="continut" class="continut" tabindex="-1"></main>
+
+<nav class="nav-jos" aria-label="Navigație principală">
+  <a href="#/acasa"    class="nav-buton" data-ruta="acasa"><span class="nav-ico">🏠</span><span class="nav-text">Acasă</span></a>
+  <a href="#/itinerar" class="nav-buton" data-ruta="itinerar"><span class="nav-ico">🗓️</span><span class="nav-text">Zile</span></a>
+  <a href="#/locuri"   class="nav-buton" data-ruta="locuri"><span class="nav-ico">📍</span><span class="nav-text">Locuri</span></a>
+  <a href="#/bani"     class="nav-buton" data-ruta="bani"><span class="nav-ico">💸</span><span class="nav-text">Bani</span></a>
+  <button id="nav-mai-mult" class="nav-buton" type="button" data-ruta="altele"><span class="nav-ico">⋯</span><span class="nav-text">Altele</span></button>
+</nav>
+
+<!-- Sertarul cu restul secțiunilor -->
+<div id="sertar" class="sertar" hidden>
+  <div class="sertar-fundal" data-inchide="1"></div>
+  <div class="sertar-carte" role="dialog" aria-label="Toate secțiunile">
+    <div class="sertar-maner"></div>
+    <div class="sertar-grila">
+      <a href="#/rezervari" class="sertar-item"><span class="sertar-ico">🎫</span><span>Rezervări</span><small>Zboruri, cazări, mașină</small></a>
+      <a href="#/harta"     class="sertar-item"><span class="sertar-ico">🗺️</span><span>Harta</span><small>Toate punctele</small></a>
+      <a href="#/vot"       class="sertar-item"><span class="sertar-ico">🗳️</span><span>Vot</span><small>Unde mergem</small></a>
+      <a href="#/de-rezervat" class="sertar-item"><span class="sertar-ico">📋</span><span>De rezervat</span><small>Ce cere rezervare</small></a>
+      <a href="#/muzica"    class="sertar-item"><span class="sertar-ico">🎵</span><span>Muzică</span><small>Playlistul nostru</small></a>
+      <a href="#/mancare"   class="sertar-item"><span class="sertar-ico">🍽️</span><span>Mâncare</span><small>Taverne și ce se cere</small></a>
+      <a href="#/pachet"    class="sertar-item"><span class="sertar-ico">🎒</span><span>Pachet</span><small>Nu uita asta</small></a>
+      <a href="#/masina"    class="sertar-item"><span class="sertar-ico">🚗</span><span>Mașina</span><small>Km și combustibil</small></a>
+      <a href="#/intrebari" class="sertar-item"><span class="sertar-ico">💬</span><span>Întrebări</span><small>Pentru povești</small></a>
+      <a href="#/amintiri"  class="sertar-item"><span class="sertar-ico">📔</span><span>Amintiri</span><small>Momentul zilei</small></a>
+      <a href="#/sos"       class="sertar-item"><span class="sertar-ico">🆘</span><span>Urgențe</span><small>Merge fără net</small></a>
+      <a href="#/setari"    class="sertar-item"><span class="sertar-ico">⚙️</span><span>Setări</span><small>Parolă, copie, cine sunt</small></a>
+    </div>
+  </div>
+</div>
+
+<!-- Fereastră pentru formulare -->
+<div id="fereastra" class="fereastra" hidden>
+  <div class="fereastra-fundal" data-inchide="1"></div>
+  <div id="fereastra-carte" class="fereastra-carte" role="dialog" aria-modal="true"></div>
+</div>
+
+<div id="paine" class="paine" role="status" aria-live="polite"></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

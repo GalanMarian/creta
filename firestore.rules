@@ -1,0 +1,72 @@
+rules_version = '2';
+
+// =====================================================================
+// Creta 2026 — regulile bazei de date
+//
+// CUM SE FOLOSEȘTE
+//   Consola Firebase → proiectul `creta` → Firestore Database → Rules →
+//   lipești tot fișierul → Publish.
+//   Până se face asta, aplicația merge, dar nu se sincronizează între
+//   telefoane: Firestore răspunde 403 și fiecare vede doar datele lui.
+//
+// CE ÎNSEAMNĂ, PE ȘLEAU
+//   Nu există conturi. Cheia web e publică prin design și stă în sursa
+//   paginii, deci oricine găsește adresa site-ului poate, din afara lui,
+//   să citească și să scrie în colecția `creta`.
+//
+//   E o alegere făcută conștient, pentru un grup de șapte oameni și cinci
+//   zile: un sistem de conturi ar fi costat mai mult decât valorează
+//   datele dinăuntru. Dar de aceea PIN-urile cazărilor și codurile de
+//   rezervare NU stau aici — ele sunt criptate cu AES-GCM în
+//   `js/date/secret.json`, cu o parolă care nu ajunge niciodată pe server.
+//
+// CE PĂSTREAZĂ TOTUȘI
+//   1. Se deschide DOAR colecția `creta`. Nimeni nu poate crea alte
+//      colecții în proiect, ca să-ți umple cota.
+//
+//   ⚠️ LISTA DE TIPURI de mai jos trebuie ținută la zi. Dacă aplicația începe
+//      să scrie un tip nou și el nu e în listă, Firestore răspunde 403 și
+//      funcția aceea merge doar local, pe telefonul fiecăruia, fără să ajungă
+//      la ceilalți. S-a întâmplat deja cu `fost` și `propriu`.
+//   2. ȘTERGEREA E INTERZISĂ. Aplicația șterge logic (`sters: true`), deci
+//      nimeni — nici din greșeală, nici dinadins — nu poate goli registrul
+//      de cheltuieli. Ce s-a scris rămâne.
+//   3. Documentele au mărime limitată, ca să nu se poată umple baza cu un
+//      singur câmp uriaș.
+//
+// COPIE DE SIGURANȚĂ
+//   Planul gratuit nu face copii. Butonul „Descarcă tot" din ⚙️ Setări e
+//   singura plasă de siguranță. Folosiți-l după excursie.
+// =====================================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /creta/{id} {
+      // Oricine poate citi — nu avem cum să deosebim un om de altul fără conturi.
+      allow read: if true;
+
+      // Se poate scrie și rescrie, dar documentul trebuie să arate ca al nostru:
+      // să aibă un `tip` dintre cele cunoscute și un câmp `d` de mărime rezonabilă.
+      allow create, update: if esteValid();
+
+      // Ștergerea, niciodată. Aplicația marchează `sters: true` în interior.
+      allow delete: if false;
+    }
+
+    function esteValid() {
+      let d = request.resource.data;
+      return d.keys().hasAll(['tip', 'd'])
+        && d.tip is string
+        && d.tip.size() > 0 && d.tip.size() < 40
+        && d.tip in ['cheltuiala', 'vot', 'pachet', 'km', 'amintire', 'setare',
+                     'propunere', 'aduce', 'raspuns', 'pusa',
+                     'fost', 'propriu', 'obiect',
+                     'piesa', 'plus', 'rezervat', 'fapt']
+        && d.d is string
+        && d.d.size() < 20000;
+    }
+
+    // Orice altă cale e refuzată implicit — inclusiv crearea de colecții noi.
+  }
+}
