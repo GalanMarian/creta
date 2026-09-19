@@ -152,18 +152,31 @@ export default function ecranHarta() {
 
   const bara = el('div', { class: 'segmente segmente-auto', style: 'margin-bottom:10px' });
 
-  function deseneazaBara(reincarca) {
-    bara.replaceChildren(...[
-      { id: 'tot', et: 'Tot' },
-      { id: 'top', et: '🏆 Topul' },
-      { id: 'vest', et: 'Vest' },
-      { id: 'est', et: 'Est' },
-      { id: 'centru', et: 'Centru' },
-      { id: 'nevizitate', et: 'Nevizitate' },
-    ].map((f) => el('button', {
+  const FILTRE = [
+    { id: 'tot', et: 'Tot' },
+    { id: 'top', et: '🏆 Topul' },
+    { id: 'vest', et: 'Vest' },
+    { id: 'est', et: 'Est' },
+    { id: 'centru', et: 'Centru' },
+    { id: 'nevizitate', et: 'Nevizitate' },
+  ];
+
+  /**
+   * Bara se redesenează la fiecare clic, ca să se mute și marcajul de „apăsat".
+   * `pune` se apelează direct, nu printr-un argument: varianta cu parametru
+   * mergea o singură dată, fiindcă butoanele redesenate rămâneau fără el.
+   */
+  function deseneazaBara() {
+    bara.replaceChildren(...FILTRE.map((f) => el('button', {
       class: 'segment', type: 'button',
       attrs: { 'aria-pressed': String(filtru === f.id) },
-      on: { click: () => { filtru = f.id; deseneazaBara(); reincarca(); } },
+      on: {
+        click: () => {
+          filtru = f.id;
+          deseneazaBara();
+          pune();
+        },
+      },
     }, f.et)));
   }
 
@@ -240,6 +253,6 @@ export default function ecranHarta() {
     ));
   });
 
-  deseneazaBara(pune);
+  deseneazaBara();
   return gazda;
 }
