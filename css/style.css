@@ -762,6 +762,12 @@ input:focus, select:focus, textarea:focus { border-color: var(--accent); outline
 .rand-fost { border-color: color-mix(in srgb, var(--verde) 40%, var(--chenar)); }
 .rand-fost .rand-card-titlu { color: var(--text-slab); }
 
+/* Rândul de cheltuială cu un ✕ lipit în dreapta, în afara butonului principal —
+   altfel ar fi un buton în buton, ceea ce nu e HTML valid. */
+.rand-cu-stergere { display: flex; align-items: stretch; gap: 6px; margin-bottom: 8px; }
+.rand-cu-stergere > .rand-card { flex: 1; min-width: 0; }
+.buton-sterge-rand { flex: none; align-self: center; }
+
 .buton-x {
   flex: none;
   width: 30px; height: 30px;

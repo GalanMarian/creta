@@ -212,12 +212,9 @@ function detaliiCheltuiala(c) {
       el('button', {
         class: 'buton buton-rosu', type: 'button',
         on: {
-          click: async () => {
+          click: () => {
             inchideFereastra();
-            if (await confirma('Ștergi cheltuiala?', `„${c.descriere}", ${euro(c.sumaCenti)}. Rămâne în baza de date ca ștearsă, dar nu mai apare nicăieri.`, { periculos: true, daText: 'Șterge' })) {
-              stare.sterge(c.id);
-              paine('Șters');
-            }
+            stergeCheltuiala(c);
           },
         },
       }, 'Șterge'),
@@ -225,25 +222,44 @@ function detaliiCheltuiala(c) {
   );
 }
 
+async function stergeCheltuiala(c) {
+  const da = await confirma(
+    'Ștergi cheltuiala?',
+    `„${c.descriere}", ${euro(c.sumaCenti)}. Dispare din listă și din decontare.`,
+    { periculos: true, daText: 'Șterge' },
+  );
+  if (!da) return false;
+  stare.sterge(c.id);
+  paine('Șters');
+  return true;
+}
+
 function randCheltuiala(c) {
   const st = stadiuAchitare(c);
-  return el('button', {
-    class: 'rand-card', type: 'button',
-    on: { click: () => deschideFereastra(c.descriere, detaliiCheltuiala(c)) },
-  },
+  return el('div', { class: 'rand-cu-stergere' },
+    el('button', {
+      class: 'rand-card', type: 'button', style: 'margin:0',
+      on: { click: () => deschideFereastra(c.descriere, detaliiCheltuiala(c)) },
+    },
     el('span', { style: 'font-size:19px;flex:none' }, categorie(c.categorie).emoji),
     el('span', { class: 'rand-card-corp' },
       el('span', { class: 'rand-card-titlu' }, c.descriere),
       el('span', { class: 'rand-card-sub' },
         `${numePersoana(c.platitDe)}${esteComuna(c) ? ` · ${(c.participanti || TOTI).length}/7` : ' · personală'}${c.data ? ` · ${dataScurta(c.data)}` : ''}`),
     ),
-    el('span', { class: 'rand-card-dreapta' },
-      el('span', { class: 'suma' }, euro(c.sumaCenti)),
-      esteComuna(c)
-        ? el('span', { style: 'display:block;font-size:11px;color:var(--text-stins)' },
-          st.gata ? '✅ achitat' : `${st.achitati}/${st.datori}`)
-        : null,
+      el('span', { class: 'rand-card-dreapta' },
+        el('span', { class: 'suma' }, euro(c.sumaCenti)),
+        esteComuna(c)
+          ? el('span', { style: 'display:block;font-size:11px;color:var(--text-stins)' },
+            st.gata ? '✅ achitat' : `${st.achitati}/${st.datori}`)
+          : null,
+      ),
     ),
+    el('button', {
+      class: 'buton-x buton-sterge-rand', type: 'button',
+      attrs: { 'aria-label': `Șterge „${c.descriere}"` },
+      on: { click: () => stergeCheltuiala(c) },
+    }, '✕'),
   );
 }
 
@@ -295,13 +311,15 @@ function panouDecontare() {
 // ─────────────────────────────── semințe ───────────────────────────────
 
 function butonSeminte() {
-  const exista = stare.toate('cheltuiala').some((c) => c.dinRezervare);
+  const exista = stare.toate('cheltuiala').some((c) => c.dinRezervare && !c.sters);
   if (exista) return null;
 
   return el('div', { class: 'card', style: 'border-color:var(--accent);margin-bottom:11px' },
-    el('h3', { class: 'card-titlu' }, 'Pornim de la mașină?'),
+    el('h3', { class: 'card-titlu' }, 'Adaug avansul mașinii?'),
     el('p', { class: 'card-sub', style: 'margin-top:5px' },
-      `Avansul de ${euro(MASINA.tarif.avansCenti)} plătit deja de Bengi, și restul de ${euro(MASINA.tarif.restNumerarCenti)} în numerar. Le adaug ca cheltuieli comune, împărțite la 7.`),
+      `Avansul de ${euro(MASINA.tarif.avansCenti)} a fost deja luat de pe cardul lui Bengi, deci se împarte la 7 chiar acum.`),
+    el('p', { style: 'margin-top:7px;font-size:12.5px;color:var(--text-slab)' },
+      `Restul de ${euro(MASINA.tarif.restNumerarCenti)} NU se adaugă aici — îl trece Bengi joi, când plătește efectiv la predare.`),
     el('button', {
       class: 'buton buton-lat', type: 'button', style: 'margin-top:11px',
       on: {
@@ -317,21 +335,10 @@ function butonSeminte() {
             achitat: {},
             dinRezervare: true,
           });
-          stare.adauga('cheltuiala', {
-            sumaCenti: MASINA.tarif.restNumerarCenti,
-            descriere: 'Rest plată mașină (numerar, la predare)',
-            categorie: 'Mașină',
-            platitDe: 'bengi',
-            comuna: true,
-            participanti: TOTI,
-            data: '2026-09-24',
-            achitat: {},
-            dinRezervare: true,
-          });
-          paine('Adăugate. Bifați pe fiecare cine a achitat.');
+          paine('Adăugat. Bifați cine a achitat.');
         },
       },
-    }, 'Adaugă cele două cheltuieli'),
+    }, `Adaugă avansul de ${euro(MASINA.tarif.avansCenti)}`),
   );
 }
 
