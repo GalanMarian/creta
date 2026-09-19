@@ -174,36 +174,24 @@ function cardAvertisment(a) {
 function panouAvertismente() {
   const stareBife = {};
   for (const a of avertismenteOrdonate({})) stareBife[a.id] = avertismentRezolvat(a);
-  const lista = avertismenteOrdonate(stareBife);
-  const active = lista.filter((a) => !a.rezolvat);
-  const gata = lista.filter((a) => a.rezolvat);
+  // Ce s-a rezolvat dispare de aici. Se poate readuce din ⚙️ Setări, dar prima
+  // pagină arată doar ce mai e de făcut.
+  const active = avertismenteOrdonate(stareBife).filter((a) => !a.rezolvat);
+
+  if (!active.length) {
+    return el('section', { class: 'sectiune' },
+      el('div', { class: 'card card-strans', style: 'background:var(--verde-slab);border-color:transparent' },
+        el('p', { style: 'font-size:14px' }, '✅ Nu mai e nimic de rezolvat înainte de plecare.')),
+    );
+  }
 
   return el('section', { class: 'sectiune' },
-    capSectiune('Înainte să plecăm',
-      active.length ? eticheta(`${active.length} nerezolvate`, 'rosu') : eticheta('Toate bifate', 'verde')),
-
-    active.length
-      ? frag(
-        el('p', { style: 'font-size:13.5px;color:var(--text-slab);margin-bottom:11px' },
-          'Lucruri care ies din rezervări citite una lângă alta. Câteva cer un telefon.'),
-        ...active.map(cardAvertisment),
-      )
-      : el('div', { class: 'card card-strans', style: 'background:var(--verde-slab);border-color:transparent' },
-        el('p', { style: 'font-size:14px' }, '✅ Nu mai e nimic de rezolvat înainte de plecare.')),
-
-    // Ce s-a rezolvat nu mai stă în față, dar nu dispare de tot: dacă cineva a
-    // bifat din greșeală, trebuie să poată da înapoi.
-    gata.length
-      ? el('details', { class: 'card', style: 'padding:0;margin-top:9px' },
-        el('summary', { class: 'sumar-card' },
-          `${gata.length} ${gata.length === 1 ? 'rezolvat' : 'rezolvate'}`),
-        el('div', { style: 'padding:0 12px 12px' }, ...gata.map(cardAvertisment)),
-      )
-      : null,
+    capSectiune('Înainte să plecăm', eticheta(`${active.length} de rezolvat`, 'rosu')),
+    el('p', { style: 'font-size:13.5px;color:var(--text-slab);margin-bottom:11px' },
+      'Lucruri care ies din rezervări citite una lângă alta. Câteva cer un telefon.'),
+    ...active.map(cardAvertisment),
   );
 }
-
-// ─────────────────────────────── restul ───────────────────────────────
 
 /** Ce mai e de rezolvat înainte de plecare — cu legătura spre lista completă. */
 function panouDeRezervat() {

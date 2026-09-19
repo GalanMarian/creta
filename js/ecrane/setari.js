@@ -9,6 +9,8 @@ import * as identitate from '../identitate.js';
 import * as secrete from '../secrete.js';
 import { PERSOANE, ROLURI } from '../date/grup.js';
 import { CONFIG } from '../firestore.js';
+import { avertismenteOrdonate } from '../date/avertismente.js';
+import { esteRezolvat, rezolva } from '../fapte.js';
 
 function descarca(numeFisier, continut) {
   const blob = new Blob([continut], { type: 'application/json' });
@@ -119,6 +121,43 @@ export default function ecranSetari() {
           'Se face singură: la fiecare modificare, la deschiderea paginii, la revenirea în fereastră și o dată la cinci minute.'),
       ),
     ),
+
+    (() => {
+      // Avertismentele bifate nu se mai văd pe prima pagină. Dacă s-a bifat ceva
+      // din greșeală, aici e singura cale înapoi.
+      const setare = stare.una('setare_avertismente');
+      const bife = (setare && !setare.sters && setare.rezolvate) || {};
+      const ascunse = avertismenteOrdonate({}).filter((a) => (a.fapt ? esteRezolvat(a.fapt) : !!bife[a.id]));
+      if (!ascunse.length) return null;
+
+      return el('section', { class: 'sectiune' },
+        capSectiune('Avertismente ascunse', eticheta(String(ascunse.length))),
+        el('div', { class: 'card' },
+          el('p', { style: 'font-size:13px;color:var(--text-slab);margin-bottom:11px' },
+            'Bifate ca rezolvate, deci nu mai apar pe prima pagină. Readu-le dacă s-a bifat din greșeală.'),
+          ...ascunse.map((a) => el('div', {
+            style: 'display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--chenar)',
+          },
+            el('span', { style: 'flex:1;font-size:13.5px;color:var(--text-slab)' }, a.titlu),
+            el('button', {
+              class: 'buton buton-fantoma buton-mic', type: 'button', style: 'flex:none',
+              on: {
+                click: () => {
+                  if (a.fapt) {
+                    rezolva(a.fapt, false);
+                  } else {
+                    const acum = { ...bife };
+                    delete acum[a.id];
+                    stare.seteaza('setare_avertismente', 'setare', { rezolvate: acum });
+                  }
+                  paine('Readus pe prima pagină');
+                },
+              },
+            }, 'Readu'),
+          )),
+        ),
+      );
+    })(),
 
     el('section', { class: 'sectiune' },
       capSectiune('Copie de siguranță'),
