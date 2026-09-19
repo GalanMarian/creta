@@ -175,14 +175,31 @@ function panouAvertismente() {
   const stareBife = {};
   for (const a of avertismenteOrdonate({})) stareBife[a.id] = avertismentRezolvat(a);
   const lista = avertismenteOrdonate(stareBife);
-  const nerez = lista.filter((a) => !a.rezolvat).length;
+  const active = lista.filter((a) => !a.rezolvat);
+  const gata = lista.filter((a) => a.rezolvat);
 
   return el('section', { class: 'sectiune' },
     capSectiune('Înainte să plecăm',
-      nerez ? eticheta(`${nerez} nerezolvate`, 'rosu') : eticheta('Toate bifate', 'verde')),
-    el('p', { style: 'font-size:13.5px;color:var(--text-slab);margin-bottom:11px' },
-      'Lucruri care ies din rezervări citite una lângă alta. Câteva cer un telefon.'),
-    ...lista.map(cardAvertisment),
+      active.length ? eticheta(`${active.length} nerezolvate`, 'rosu') : eticheta('Toate bifate', 'verde')),
+
+    active.length
+      ? frag(
+        el('p', { style: 'font-size:13.5px;color:var(--text-slab);margin-bottom:11px' },
+          'Lucruri care ies din rezervări citite una lângă alta. Câteva cer un telefon.'),
+        ...active.map(cardAvertisment),
+      )
+      : el('div', { class: 'card card-strans', style: 'background:var(--verde-slab);border-color:transparent' },
+        el('p', { style: 'font-size:14px' }, '✅ Nu mai e nimic de rezolvat înainte de plecare.')),
+
+    // Ce s-a rezolvat nu mai stă în față, dar nu dispare de tot: dacă cineva a
+    // bifat din greșeală, trebuie să poată da înapoi.
+    gata.length
+      ? el('details', { class: 'card', style: 'padding:0;margin-top:9px' },
+        el('summary', { class: 'sumar-card' },
+          `${gata.length} ${gata.length === 1 ? 'rezolvat' : 'rezolvate'}`),
+        el('div', { style: 'padding:0 12px 12px' }, ...gata.map(cardAvertisment)),
+      )
+      : null,
   );
 }
 

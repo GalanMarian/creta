@@ -6,7 +6,7 @@
 // niciodată — datele vin din localStorage când nu e rețea, iar un răspuns
 // vechi de la Firestore ar fi mai rău decât niciunul.
 
-const VERSIUNE = 'creta-v22';
+const VERSIUNE = 'creta-v23';
 
 const DE_CACHED = [
   './',

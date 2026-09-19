@@ -92,7 +92,8 @@ export const GRUPE = [
     obiecte: [
       { id: 'checkin-online', text: 'Check-in online și cardul de îmbarcare salvat în telefon', critic: true },
       { id: 'bagaj-cantarit', text: 'Rucsacul cântărit și măsurat după regulile companiei', critic: true, nota: 'Wizz Air și Jet2 au limite diferite la bagajul de cabină. Verificați-le separat — un rucsac prea mare la poartă costă mai mult decât bagajul de cală.' },
-      { id: 'roaming', text: 'Verifică pachetul de roaming', doar: ['bengi', 'diana'], nota: 'După Brexit, datele în UE pot fi taxate.' },
+      { id: 'roaming', text: 'Ia-ți roaming pentru Grecia', critic: true, doar: ['marian', 'andrei', 'demian', 'adina', 'sara'], nota: 'În UE ar trebui să meargă ca acasă, dar unele abonamente ieftine și cartelele preplătite au roamingul închis sau limitat la câteva sute de MB. Verifică în aplicația operatorului ÎNAINTE, nu la aterizare.' },
+      { id: 'roaming-uk', text: 'Cumpără pachet de roaming sau eSIM pentru Grecia', critic: true, doar: ['bengi', 'diana'], nota: 'După Brexit, roamingul în UE nu mai e inclus automat la operatorii britanici — se plătește pe zi sau pe MB. Un eSIM de date pentru Grecia costă câțiva euro și se activează în cinci minute.' },
       { id: 'peskesi-mutat', fapt: 'peskesi-mutat', text: 'Sună la Peskesi și mută masa la 15:00', critic: true, doar: ['marian'], nota: '+30 2810 288887. Vezi avertismentul de pe prima pagină.' },
       { id: 'eurocars-sofer', fapt: 'al-doilea-sofer', text: 'Întreabă Eurocars de al doilea șofer', critic: true, doar: ['bengi'], nota: 'WhatsApp +30 6970 017115.' },
       { id: 'parcare-otopeni', fapt: 'parcare-rezervata', text: 'Rezervă locul de parcare la Otopeni', critic: true, doar: ['andrei'], nota: 'E mașina ta. parcareinotopeni.ro sau 0765 53 00 53. ~130 lei pentru cele 7 zile începute.' },
