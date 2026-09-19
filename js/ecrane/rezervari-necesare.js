@@ -69,6 +69,7 @@ function cardRezervare(r) {
         el('h3', { style: `font-size:15px;font-weight:650;${facut ? 'color:var(--text-slab)' : ''}` }, r.titlu),
       ),
       el('div', { class: 'etichete', style: 'justify-content:flex-end' },
+        r.doar ? eticheta(r.doar.map(numePersoana).join(', '), 'accent') : null,
         r.critic && !facut ? eticheta('Urgent', 'rosu') : null,
         r.capcana ? eticheta('⚠ Capcană', 'galben') : null,
         facut ? eticheta('✓ Făcut', 'verde') : null,
@@ -107,13 +108,17 @@ function cardRezervare(r) {
 }
 
 export default function ecranRezervariNecesare() {
-  const deFacutAcum = rezervariDin('acum').filter((r) => !esteFacut(r)).length;
+  const eu = cineSunt();
+  const aleMele = rezervariDin('acum').filter((r) => !r.doar || (eu && r.doar.includes(eu)));
+  const deFacutAcum = aleMele.filter((r) => !esteFacut(r)).length;
 
   return frag(
     el('section', { class: 'sectiune' },
       el('div', { class: `card ${deFacutAcum ? '' : 'card-strans'}`, style: deFacutAcum ? 'border-color:var(--rosu)' : '' },
         el('h2', { class: 'card-titlu' },
-          deFacutAcum ? `${deFacutAcum} ${deFacutAcum === 1 ? 'lucru' : 'lucruri'} de rezolvat înainte de plecare` : '✅ Tot ce trebuia dinainte e făcut'),
+          deFacutAcum
+            ? `${deFacutAcum} ${deFacutAcum === 1 ? 'lucru' : 'lucruri'} de rezolvat înainte de plecare`
+            : '✅ Tot ce ține de tine e făcut'),
         el('p', { class: 'card-sub', style: 'margin-top:5px' },
           'Vestea bună: în Creta aproape nimic nu cere rezervare din timp. Excepțiile sunt bărcile pentru un grup de șapte, activitățile cu ghid și restaurantele bune seara — și toate se fac cu o zi înainte, de acolo.'),
       ),

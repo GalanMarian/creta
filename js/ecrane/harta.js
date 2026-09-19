@@ -200,7 +200,7 @@ export default function ecranHarta() {
       }).addTo(stratMarkere);
 
       m.bindTooltip(`${loc.rang ? `${loc.rang}. ` : ''}${loc.nume}`, { direction: 'top' });
-      m.bindPopup(continutPopup(loc), { maxWidth: 240, minWidth: 200 });
+      m.bindPopup(continutPopup(loc), { maxWidth: 230, minWidth: 190, maxHeight: 260, autoPanPadding: [12, 12] });
     }
 
     for (const [, b] of Object.entries(BAZE)) {

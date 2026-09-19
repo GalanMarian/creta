@@ -836,13 +836,19 @@ details[open] > .sumar-card::before { content: '▾ '; }
 .leaflet-container { font: inherit; background: var(--fundal-pata); }
 .leaflet-container a { color: var(--accent); }
 
+/* Bula de pe hartă trebuie să încapă pe un telefon, peste hartă, fără să
+   acopere tot ecranul. De aceea fotografia e o fâșie, nu un pătrat. */
 .popup img {
-  width: 100%; aspect-ratio: 4 / 3; object-fit: cover;
-  border-radius: 7px; display: block; margin-bottom: 7px;
+  width: 100%; height: 86px; object-fit: cover;
+  border-radius: 7px; display: block; margin-bottom: 6px;
 }
-.popup-titlu { font-weight: 650; font-size: 14.5px; }
-.popup-sub { font-size: 12.5px; color: var(--text-slab); margin-top: 1px; }
-.popup-dist { font-size: 11.5px; color: var(--text-stins); margin-top: 4px; }
+.popup-titlu { font-weight: 650; font-size: 14px; line-height: 1.3; }
+.popup-sub {
+  font-size: 12px; color: var(--text-slab); margin-top: 1px; line-height: 1.35;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.popup-dist { font-size: 11px; color: var(--text-stins); margin-top: 3px; }
+.leaflet-popup-content { margin: 9px 10px; }
 
 .poze { display: grid; gap: 9px; grid-template-columns: repeat(2, 1fr); }
 .poza { margin: 0; }

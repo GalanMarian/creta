@@ -89,8 +89,15 @@ export function deschideFereastra(titlu, corp, opt = {}) {
   document.body.style.overflow = 'hidden';
   inchideCurenta = opt.laInchidere || null;
 
-  const focusabil = carte.querySelector('input, select, textarea, button:not(.fereastra-inchide)');
-  if (focusabil && !opt.faraFocus) setTimeout(() => focusabil.focus(), 60);
+  // Întotdeauna de sus: altfel nu se vede nici titlul, nici ✕, nici fotografia.
+  carte.scrollTop = 0;
+
+  // Focalizăm doar în formulare, unde omul oricum vrea să scrie. Într-o fișă de
+  // citit, focalizarea pe primul buton derula foaia până jos și ascundea tot.
+  const primulCamp = carte.querySelector('input:not([type=checkbox]), select, textarea');
+  if (primulCamp && !opt.faraFocus) {
+    setTimeout(() => { primulCamp.focus({ preventScroll: true }); carte.scrollTop = 0; }, 60);
+  }
 }
 
 export function inchideFereastra() {

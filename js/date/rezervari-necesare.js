@@ -11,6 +11,7 @@ export const REZERVARI = [
   {
     id: 'rez-peskesi',
     fapt: 'peskesi-mutat',
+    doar: ['marian'],
     titlu: 'Peskesi — mutarea mesei la 15:00',
     cand: 'acum',
     critic: true,
@@ -21,6 +22,7 @@ export const REZERVARI = [
   {
     id: 'rez-sofer2',
     fapt: 'al-doilea-sofer',
+    doar: ['bengi'],
     titlu: 'Eurocars — al doilea șofer și întrebarea cu Balos',
     cand: 'acum',
     critic: true,
@@ -31,6 +33,7 @@ export const REZERVARI = [
   {
     id: 'rez-parcare',
     fapt: 'parcare-rezervata',
+    doar: ['andrei'],
     titlu: 'Parcarea de la Otopeni',
     cand: 'acum',
     critic: true,

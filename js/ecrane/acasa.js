@@ -4,7 +4,7 @@
 
 import { el, frag, capSectiune, eticheta, textAldin, paine } from '../ui.js';
 import * as stare from '../stare.js';
-import { euPersoana } from '../identitate.js';
+import { euPersoana, cineSunt } from '../identitate.js';
 import { numePersoana } from '../date/grup.js';
 import { esteDeblocat } from '../secrete.js';
 import { ZILE, KM_TOTAL_ESTIMAT } from '../date/itinerariu.js';
@@ -176,7 +176,12 @@ function panouAvertismente() {
   for (const a of avertismenteOrdonate({})) stareBife[a.id] = avertismentRezolvat(a);
   // Ce s-a rezolvat dispare de aici. Se poate readuce din ⚙️ Setări, dar prima
   // pagină arată doar ce mai e de făcut.
-  const active = avertismenteOrdonate(stareBife).filter((a) => !a.rezolvat);
+  const eu = cineSunt();
+  // O sarcină cu `doar` e treaba unui singur om — ceilalți n-au ce face cu ea
+  // și n-are rost să le stea pe prima pagină.
+  const active = avertismenteOrdonate(stareBife)
+    .filter((a) => !a.rezolvat)
+    .filter((a) => !a.doar || (eu && a.doar.includes(eu)));
 
   if (!active.length) {
     return el('section', { class: 'sectiune' },
@@ -195,7 +200,8 @@ function panouAvertismente() {
 
 /** Ce mai e de rezolvat înainte de plecare — cu legătura spre lista completă. */
 function panouDeRezervat() {
-  const ale = rezervariDin('acum');
+  const eu = cineSunt();
+  const ale = rezervariDin('acum').filter((r) => !r.doar || (eu && r.doar.includes(eu)));
   const facute = ale.filter((r) => {
     // cele legate de un fapt comun se citesc de acolo, nu din bifa lor veche
     if (r.fapt) return esteRezolvat(r.fapt);

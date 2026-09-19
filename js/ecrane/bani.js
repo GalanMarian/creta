@@ -317,7 +317,7 @@ function butonSeminte() {
   return el('div', { class: 'card', style: 'border-color:var(--accent);margin-bottom:11px' },
     el('h3', { class: 'card-titlu' }, 'Adaug avansul mașinii?'),
     el('p', { class: 'card-sub', style: 'margin-top:5px' },
-      `Avansul de ${euro(MASINA.tarif.avansCenti)} a fost deja luat de pe cardul lui Bengi, deci se împarte la 7 chiar acum.`),
+      `Avansul de ${euro(MASINA.tarif.avansCenti)} a fost plătit de Marian și deja achitat de toți — se adaugă bifat, doar ca să rămână în socoteală.`),
     el('p', { style: 'margin-top:7px;font-size:12.5px;color:var(--text-slab)' },
       `Restul de ${euro(MASINA.tarif.restNumerarCenti)} NU se adaugă aici — îl trece Bengi joi, când plătește efectiv la predare.`),
     el('button', {
@@ -326,16 +326,17 @@ function butonSeminte() {
         click: () => {
           stare.adauga('cheltuiala', {
             sumaCenti: MASINA.tarif.avansCenti,
-            descriere: 'Avans mașină (deja plătit)',
+            descriere: 'Avans mașină (plătit și achitat)',
             categorie: 'Mașină',
-            platitDe: 'bengi',
+            platitDe: 'marian',
             comuna: true,
             participanti: TOTI,
             data: '2026-09-17',
-            achitat: {},
+            // deja s-au dat banii înapoi, deci nu mai apare în decontare
+            achitat: { demian: true, andrei: true, bengi: true },
             dinRezervare: true,
           });
-          paine('Adăugat. Bifați cine a achitat.');
+          paine('Adăugat, bifat ca achitat de toți.');
         },
       },
     }, `Adaugă avansul de ${euro(MASINA.tarif.avansCenti)}`),

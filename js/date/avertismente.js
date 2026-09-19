@@ -10,6 +10,7 @@ export const AVERTISMENTE = [
   {
     id: 'joi-lant',
     fapt: 'peskesi-mutat',
+    doar: ['marian'],
     severitate: 'critic',
     cand: '2026-09-24',
     titlu: 'Joi: masa, predarea mașinii și zborul lui Bengi nu încăpeau una după alta',
@@ -22,6 +23,7 @@ export const AVERTISMENTE = [
   {
     id: 'al-doilea-sofer',
     fapt: 'al-doilea-sofer',
+    doar: ['bengi'],
     severitate: 'critic',
     titlu: 'Bengi e singurul șofer pe contract',
     problema: 'Contractul Eurocars are un singur nume. Dacă altcineva conduce și se întâmplă orice — de la o zgârietură la un accident — asigurarea nu acoperă nimic. Iar Bengi conduce 154 km noaptea, după 20 de ore de drum, și e singurul care poate duce mașina la predare joi.',
@@ -62,6 +64,7 @@ export const AVERTISMENTE = [
   {
     id: 'balos-intrebare',
     fapt: 'balos-intrebat',
+    doar: ['bengi'],
     severitate: 'critic',
     titlu: 'Întreabă Eurocars dacă poți merge la Balos cu mașina',
     problema: 'Drumul spre Balos e de pământ, iar contractele de închiriere din Creta îl interzic de obicei explicit („No Balos"). Pe drum neasfaltat, asigurarea nu acoperă nimic: o piatră în parbriz sau în baia de ulei se plătește integral. Dar condițiile diferă de la o firmă la alta, iar unele vând o asigurare separată „pentru pietriș".',
